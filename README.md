@@ -131,5 +131,8 @@ El botón de reintento ahora utiliza directamente `ejecutarConsulta`, evitando s
 
 **Verificación:** después de la modificación se ejecutaron `npm run test:run` y `npm run build`. Ambos finalizaron correctamente.
 
+## Publicación
 
+**Repositorio GitHub:** [Pulso Abierto](https://github.com/MarcosPastorini/PulsoAbierto_React)
 
+**Aplicación publicada en Vercel:** [Pulso Abierto](https://pulso-abierto-react-alpha.vercel.app/)
