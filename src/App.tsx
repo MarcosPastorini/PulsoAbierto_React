@@ -40,7 +40,27 @@ const alternarFavorita = useFavoritosStore(
   (state) => state.alternarFavorita
 );
 
-async function validarConsulta(e: FormEvent<HTMLFormElement>) {
+async function ejecutarConsulta() {
+  setErrorBusqueda('');
+  setErrorMoneda('');
+  setMensaje('');
+  setError('');
+  setCargando(true);
+
+  try {
+    const datos = await obtenerPrecios(moneda);
+    setCriptomonedas(datos);
+    setConsultaRealizada(true);
+    setMensaje('Precios actualizados correctamente.');
+  } catch {
+    setError('No se pudieron obtener los precios. Intentá nuevamente.');
+    setConsultaRealizada(true);
+  } finally {
+    setCargando(false);
+  }
+}
+
+function validarConsulta(e: FormEvent<HTMLFormElement>) {
   e.preventDefault();
 
   const resultado = consultaSchema.safeParse({
@@ -63,23 +83,7 @@ async function validarConsulta(e: FormEvent<HTMLFormElement>) {
     return;
   }
 
-  setErrorBusqueda('');
-  setErrorMoneda('');
-  setMensaje('');
-  setError('');
-  setCargando(true);
-
-  try {
-    const datos = await obtenerPrecios(moneda);
-    setCriptomonedas(datos);
-    setConsultaRealizada(true);
-    setMensaje('Precios actualizados correctamente.');
-  } catch {
-    setError('No se pudieron obtener los precios. Intentá nuevamente.');
-    setConsultaRealizada(true);
-  } finally {
-    setCargando(false);
-  }
+  ejecutarConsulta();
 }
 
   return (
@@ -146,9 +150,7 @@ async function validarConsulta(e: FormEvent<HTMLFormElement>) {
                 mensaje={mensaje}
                 cantidadResultados={criptomonedasFiltradas.length}
                 consultaRealizada={consultaRealizada}
-                onReintentar={() => validarConsulta({
-                  preventDefault: () => {}
-                } as FormEvent<HTMLFormElement>)}
+                onReintentar={ejecutarConsulta}
               />
 
               {criptomonedas.length > 0 && (
